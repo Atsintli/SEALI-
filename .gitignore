@@ -122,3 +122,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+clusters_audiotest/
+
+saved_models/
+
+segments_audiotest/
