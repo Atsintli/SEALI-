@@ -38,7 +38,7 @@ Este código carga mediante el archivo get_audios_&_syths_IP.scd varios sinsteti
 
 ### 5. A improvisar con SEALI!!!
        
-# Motivaciones
+## Motivaciones
 
 “No pongas jamás tu creación al servicio de otra cosa que no sea la libertad.” Esta es la frase con la que el cineasta checo Jan Savankmajer (Praga, 1934) finaliza su decálogo sobre su particular manera de hacer cine. ¿Cómo intento yo buscar esa libertad? En mi quehacer como creador musical y sonoro he encontrado distintas aproximaciones que me han permitido ampliar mi panorama de acción más allá de las técnicas y prácticas clásicas que involucran los procesos de creación musical, una de estas fue mi acercamiento a las ciencias de la complejidad. A partir de este paradigma derivé una propuesta de creación sonora basada en el estudio de sistemas interrelacionados compuestos por agentes con funciones artificiales que en interacción con ellos mismos y su entorno son capaces de producir resultados emergentes, no previstos a través de mecanismos homeostáticos, es decir mecanismos de adaptación interna a un contexto variable, inestable, cambiante. 
 
@@ -60,7 +60,7 @@ Esta máquina que escucha y que crea sonidos idealmente sería una ampliación d
 
 Asimismo lo que intento hacer con este sistema parte de integrar ciertas estéticas ligadas a cada una de estas prácticas para tratar de encontrar una o varias formas de creación sonora que se encuentren en el intersticio de las mismas. En este sentido el sistema es pensado como un espacio que promueve la interacción colectiva entre distintos agentes humanos y máquinas enfocado en la creación de música nueva donde el objeto sonoro pueda ser entendido como una unidad con cualidades polisémicas según su contexto.
 
-# SEALI (Sistema de escucha automática para la libre improvisación)
+## SEALI 
 
 La parte técnica de este proyecto realizada hasta ahora se ha concentrado en dos grandes vertientes: la sistematización de mi escucha que involucra un proceso de clasificación de música y la obtención de conocimiento para el proceso de aprendizaje automático que incluye, la extracción óptima de atributos  de la base de datos y los procesos automáticos de clasificación. 
 
