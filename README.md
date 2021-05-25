@@ -21,7 +21,7 @@ Nota: Esta guia ha sido realizada para sistemas operativos GNU/LINUX. Hasta el m
     git clone https://github.com/Atsintli/Interdictum-Prothesium.git
    
     
-### 3. Abrir la terminal en la carpeta del repositorio y ejecutar:
+### 2. Abrir la terminal en la carpeta del repositorio y ejecutar:
 
        source init.bash
        
@@ -31,12 +31,12 @@ Este código corre paralelamente los 6 algoritmos de escucha automática para co
 
     • 05_extract_features_in_realtime+OSC_sender.py
 
-### 4. Abrir el siguiente código con Supercollider y ejecutar (ctrl+enter) todas las lineas de código:
+### 3. Abrir el siguiente código con Supercollider y ejecutar (ctrl+enter) todas las lineas de código:
 Este código carga mediante el archivo get_audios_&_syths_IP.scd varios sinstetizadores y directorios a los archivos de audio previamente reubicados (es necesario cambiar todos los directorios de get_audios_&_syths_IP.scd a los tuyos propios).
 
        osc_sonification_data_reciver.scd
 
-### 5. A improvisar con SEALI!!!
+### 4. A improvisar con SEALI!!!
        
 ## Motivaciones
 
