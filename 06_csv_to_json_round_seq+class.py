@@ -5,12 +5,10 @@ import glob
 import csv
 from numpy import loadtxt
 import os
-from utils import get_json, save_as_json, save_matrix_array
-from utils import save_descriptors_as_matrix
+from utils import *
 import toolz as tz
 from sklearn.cluster import MeanShift, estimate_bandwidth
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
-
 
 file_in = "segments_flatness.csv"
 json_file = "segments_flatness_rounded_seq.json"
@@ -46,7 +44,7 @@ def round_by_class():
     grouped_data = tz.groupby(lambda clases: clases['clase'], data)
     convert_write_json(grouped_data, json_file_2)
 
-#round_by_seq()
+round_by_seq()
 round_by_class()
 print('Done')
 # %%

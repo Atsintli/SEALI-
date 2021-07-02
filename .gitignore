@@ -128,3 +128,7 @@ clusters_audiotest/
 saved_models/
 
 segments_audiotest/
+
+03_generate_LSTM_model.py
+
+10_Regenerate_sequences_by_class.py
