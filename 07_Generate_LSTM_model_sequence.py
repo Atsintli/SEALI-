@@ -51,22 +51,21 @@ def prepare_sequences(all_data, uniques):
     for i in range(0, len(all_data) - sequence_length, 1):
         sequence_in = all_data[i:i + sequence_length]
         sequence_out = all_data[i + sequence_length] #51, 52
-        network_input.append([feature_to_int[char] for char in sequence_in])
-        #network_input.append(sequence_in)
+        #network_input.append([feature_to_int[char] for char in sequence_in])
+        network_input.append(sequence_in)
         network_output.append(feature_to_int[sequence_out])
 
     n_patterns = len(network_input)
 
     # reshape the input into a format compatible with LSTM layers
     network_input = np.reshape(network_input, (n_patterns, sequence_length, 1))
-    network_input = network_input / float(uniques) # normalize values
+    #network_input = network_input / float(uniques) # normalize values
     #print(network_input[0:10])
 
     network_output = np_utils.to_categorical(network_output)
     #print(network_output[0:5])
 
     return network_input, network_output
-
 #%%
 def create_network(timesteps, x, y):
     """ create the structure of the neural network """
@@ -111,19 +110,15 @@ def train(model, network_input, network_output):
 def train_network():
     all_data = data()
     n_classes = len(set(all_data))
-    #print(n_classes)
     network_input, network_output = prepare_sequences(all_data, n_classes)
     note_to_int = dict((note, number) for number, note in enumerate(all_data))
-    #print(network_input[0:5])
-    #print(network_output[0:5])
     timesteps = network_input.shape[1]
-    #print(network_output.shape)
     x = network_input.shape[2]
     y = network_output.shape[1]
-    #print(timesteps,x, y)
     model = create_network(timesteps, x, n_classes)
-    #print(network_input)
     train(model, network_input, network_output)
 
 if __name__ == '__main__':
     train_network()
+
+# %%

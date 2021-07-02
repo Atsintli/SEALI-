@@ -16,7 +16,7 @@ json_input_by_seq = "segments_flatness_rounded_seq.json" #ordered by sequence
 json_input_by_class = "segments_flatness_rounded_class.json" #ordered by classes
 audio_segments = 'segments_audiotest/'
 #load_model = "saved_models/weights/weights-improvement-1723-0.0100-bigger.hdf5" #model with 2 round 75 clases
-load_model = "saved_models/weights/test-improvement-29-0.9447-bigger.hdf5" # model with 3 round 5nn clases
+load_model = "saved_models/weights/test-improvement-747-0.7414-bigger.hdf5" # model with 3 round 5nn clases
 audio_file_out = "SIR_1"
 
 with open(json_input_by_seq) as file:
@@ -61,7 +61,7 @@ def create_network(timesteps,x,y): #timesteps, num dimenssions (features), total
     model.add(Activation('relu'))
     model.add(BatchNorm())
     model.add(Dropout(0.3))
-    model.add(Dense(7))
+    model.add(Dense(len(y)))
     model.add(Activation('softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
     model.load_weights(load_model)
@@ -107,14 +107,10 @@ def predict_sequence_from_data(features, classes, iterations, classified_data):
       prediction_input = np.reshape(prediction_input_, (1, timesteps, x))
       #print("Prediction_input reshape:", prediction_input_)7
     return list(map(lambda x: x['features'], files))
-#%%
-model = create_network(10, 1, 7) #timesteps, num dimenssions
 
 #%%
 def run_all():
     classes = uniques()
-    print(classes)
-    #n_classes = len(set(classes))
     classified_data = get_classified_data() 
     features = initial_seq()
     lastResult = predict_sequence_from_data(features, classes, 20, classified_data)
