@@ -12,7 +12,7 @@ import os
 from utils import *
 import toolz as tz
 
-out_file = 'segments_flatness.csv'
+out_file = 'datasets/segments_flatness.csv'
 in_dir = 'segments_audiotest/' + "*.wav"
 
 def extract_mfccs(audio_file):
@@ -26,20 +26,20 @@ def extract_mfccs(audio_file):
     pool = essentia.Pool()
     for frame in ess.FrameGenerator(audio, frameSize=2048, hopSize=2048, startFromZero=True): #for chroma frameSize=8192*2, hopSize=8192, #fz=88200, hs=44100
         mag, phase, = CartesianToPolar()(fft(w(frame)))
-        mfcc_bands, mfcc_coeffs = MFCC(numberCoefficients=13)(mag)
-        contrast, spectralValley = SpectralContrast()(mag)
         flatness = Flatness()(mag)
-        spectral_complex = SpectralComplexity()(mag)
-        centroid = Centroid()(mag)
-        loudness = Loudness()(mag)        
+        #mfcc_bands, mfcc_coeffs = MFCC(numberCoefficients=13)(mag)
+        #contrast, spectralValley = SpectralContrast()(mag)
+        #spectral_complex = SpectralComplexity()(mag)
+        #centroid = Centroid()(mag)
+        #loudness = Loudness()(mag)        
 
         pool.add('lowlevel.flatness', [flatness])
-        pool.add('lowlevel.mfcc', mfcc_coeffs)
-        pool.add('lowlevel.loudness', [loudness])
-        pool.add('lowlevel.spectralContrast', contrast)
-        pool.add('lowlevel.centroid', [centroid])
+        #pool.add('lowlevel.mfcc', mfcc_coeffs)
+        #pool.add('lowlevel.loudness', [loudness])
+        #pool.add('lowlevel.spectralContrast', contrast)
+        #pool.add('lowlevel.centroid', [centroid])
+        #pool.add('lowlevel.spectral_complexity', [spectral_complex])
         #pool.add('lowlevel.dyncomplex', [dynamic_complexity])
-        pool.add('lowlevel.spectral_complexity', [spectral_complex])
         #pool.add('lowlevel.melbands', mel_bands)
         #pool.add('lowlevel.onsets', [onset])
         #pool.add('lowlevel.chroma', croma)
@@ -56,12 +56,12 @@ def extract_mfccs(audio_file):
     #os.remove("mfccmean.json")
     return {"file": json_data['audio_file'],
             "flatness": json_data['lowlevel']['flatness']['mean'],
-            "mfccMean": json_data['lowlevel']['mfcc']['mean'],
-            "mfccVar": json_data['lowlevel']['mfcc']['var'],
-            "complexity": json_data['lowlevel']['spectral_complexity']['mean'],
-            "loudness": json_data['lowlevel']['loudness']['mean'],
-            "centroid": json_data['lowlevel']['centroid']['mean'],
-            "spectralContrast": json_data['lowlevel']['spectralContrast']['mean'],
+            #"mfccMean": json_data['lowlevel']['mfcc']['mean'],
+            #"mfccVar": json_data['lowlevel']['mfcc']['var'],
+            #"complexity": json_data['lowlevel']['spectral_complexity']['mean'],
+            #"loudness": json_data['lowlevel']['loudness']['mean'],
+            #"centroid": json_data['lowlevel']['centroid']['mean'],
+            #"spectralContrast": json_data['lowlevel']['spectralContrast']['mean']
             #"mel": json_data['lowlevel']['melbands']['mean'],
             # "chroma": json_data['lowlevel']['chroma']['mean'],
             #"onsets": json_data['lowlevel']['onsets']['mean'],

@@ -12,11 +12,11 @@ import json
 import os
 #%%
 #Init data
-json_input_by_seq = "segments_flatness_rounded_seq.json" #ordered by sequence
-json_input_by_class = "segments_flatness_rounded_class.json" #ordered by classes
+json_input_by_seq = "datasets/segments_flatness_rounded_seq.json" #ordered by sequence
+load_model = "saved_models/weights/SIR-improvement-19816-0.3318-bigger.hdf5" # model with 3 round 5nn clases
+json_input_by_class = "datasets/segments_flatness_rounded_class.json" #ordered by classes
 audio_segments = 'segments_audiotest/'
 #load_model = "saved_models/weights/weights-improvement-1723-0.0100-bigger.hdf5" #model with 2 round 75 clases
-load_model = "saved_models/weights/test-improvement-747-0.7414-bigger.hdf5" # model with 3 round 5nn clases
 audio_file_out = "SIR_1"
 
 with open(json_input_by_seq) as file:
@@ -37,14 +37,14 @@ def uniques():
 
 #Define initial sequence
 def initial_seq():
-    data = jsonData[0:10]
+    data = jsonData[0:5]
     features = [f['features'] for f in data]
     features = np.array([features])
     return features
 
 #%%
 def create_network(timesteps,x,y): #timesteps, num dimenssions (features), total class number
-    neurons = 64
+    neurons = 256
     """ create the structure of the neural network """
     model = Sequential()
     model.add(LSTM(
@@ -61,7 +61,8 @@ def create_network(timesteps,x,y): #timesteps, num dimenssions (features), total
     model.add(Activation('relu'))
     model.add(BatchNorm())
     model.add(Dropout(0.3))
-    model.add(Dense(len(y)))
+    model.add(Dense(len(y)-1))
+    #print("soy ylen", len(y))
     model.add(Activation('softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
     model.load_weights(load_model)
@@ -96,26 +97,31 @@ def predict_sequence_from_data(features, classes, iterations, classified_data):
     model = create_network(timesteps, x, classes) #timesteps, num dimenssions
     files = []
     prediction_input = np.reshape(features, (1, timesteps, x))
-    while len(files) < iterations:
-      prediction = model.predict(prediction_input, verbose=0)
-      class_ = np.argmax(prediction)
-      next_file = getFile(class_, classified_data) #to select a random file form predicted class
-      files.append(next_file)
-      #print("Class to note:", class_to_feature[class_])
-      prediction_input_ = np.append(prediction_input.flatten()[1:], class_to_feature[class_]) #adds data(prediction) to prediction
-      #print("Prediction_input:", prediction_input_)
-      prediction_input = np.reshape(prediction_input_, (1, timesteps, x))
-      #print("Prediction_input reshape:", prediction_input_)7
-    return list(map(lambda x: x['features'], files))
+    print(prediction_input)
+    prediction = model.predict(prediction_input, verbose=0)
+    class_ = np.argmax(prediction)
+    print(class_)
+    # while len(files) < iterations:
+    #   prediction = model.predict(prediction_input, verbose=0)
+    #   class_ = np.argmax(prediction)
+    #   next_file = getFile(class_, classified_data) #to select a random file form predicted class
+    #   files.append(next_file)
+    #   #print("Class to note:", class_to_feature[class_])
+    #   prediction_input_ = np.append(prediction_input.flatten()[1:], class_to_feature[class_]) #adds data(prediction) to prediction
+    #   #print("Prediction_input:", prediction_input_)
+    #   prediction_input = np.reshape(prediction_input_, (1, timesteps, x))
+    #   #print("Prediction_input reshape:", prediction_input_)7
+    # return list(map(lambda x: x['features'], files))
 
 #%%
 def run_all():
     classes = uniques()
+    print(len(classes))
     classified_data = get_classified_data() 
     features = initial_seq()
     lastResult = predict_sequence_from_data(features, classes, 20, classified_data)
     #concatenateFiles(lastResult)
-    return print("Last result:", lastResult)
+    #return print("Last result:", lastResult)
 
 run_all()
 # %%

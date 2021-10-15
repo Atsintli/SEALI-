@@ -15,7 +15,7 @@ import glob
 import json
 import os
 
-file_in = 'segments_flatness.csv'
+file_in = 'datasets/segments_flatness.csv'
 
 def parse_database():
   trainset = []
@@ -37,9 +37,9 @@ def data():
     return all_data
 
 #%%
-def prepare_sequences(all_data, uniques):
+def prepare_sequences(all_data):
     """ Prepare the sequences used by the Neural Network """
-    sequence_length = 10
+    sequence_length = 5
 
     # create a dictionary to map pitches to integers
     feature_to_int = dict((note, number) for number, note in enumerate(np.unique(all_data)))
@@ -60,16 +60,18 @@ def prepare_sequences(all_data, uniques):
     # reshape the input into a format compatible with LSTM layers
     network_input = np.reshape(network_input, (n_patterns, sequence_length, 1))
     #network_input = network_input / float(uniques) # normalize values
-    #print(network_input[0:10])
+    print(network_input[0:10])
 
     network_output = np_utils.to_categorical(network_output)
-    #print(network_output[0:5])
+    print(network_output[0:10])
 
     return network_input, network_output
+
+#prepare_sequences(data())
 #%%
 def create_network(timesteps, x, y):
     """ create the structure of the neural network """
-    neurons = 64
+    neurons = 256
     model = Sequential()
     model.add(LSTM(
         neurons,
@@ -80,11 +82,11 @@ def create_network(timesteps, x, y):
     model.add(LSTM(neurons, return_sequences=True, recurrent_dropout=0.3,))
     model.add(LSTM(neurons))
     model.add(BatchNorm())
-    model.add(Dropout(0.6))
+    model.add(Dropout(0.3))
     model.add(Dense(neurons))
     model.add(Activation('relu'))
     model.add(BatchNorm())
-    model.add(Dropout(0.6))
+    model.add(Dropout(0.3))
     model.add(Dense(y))
     model.add(Activation('softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
@@ -93,7 +95,7 @@ def create_network(timesteps, x, y):
 
 def train(model, network_input, network_output):
     """ train the neural network """
-    filepath = "saved_models/weights/test-improvement-{epoch:02d}-{loss:.4f}-bigger.hdf5"
+    filepath = "saved_models/weights/SIR-improvement-{epoch:02d}-{loss:.4f}-bigger.hdf5"
     checkpoint = ModelCheckpoint(
         filepath,
         monitor='loss',
@@ -103,19 +105,22 @@ def train(model, network_input, network_output):
     )
     callbacks_list = [checkpoint]
 
-    model.fit(network_input, network_output, epochs=5000, batch_size=10, callbacks=callbacks_list)
+    model.fit(network_input, network_output, epochs=20000, batch_size=256, callbacks=callbacks_list)
 
 #%%
 
 def train_network():
     all_data = data()
     n_classes = len(set(all_data))
-    network_input, network_output = prepare_sequences(all_data, n_classes)
-    note_to_int = dict((note, number) for number, note in enumerate(all_data))
+    print(n_classes)
+    network_input, network_output = prepare_sequences(all_data)
+    #note_to_int = dict((note, number) for number, note in enumerate(all_data))
     timesteps = network_input.shape[1]
     x = network_input.shape[2]
     y = network_output.shape[1]
-    model = create_network(timesteps, x, n_classes)
+    print("y", y)
+    print(network_output.shape)
+    model = create_network(timesteps, x, y)
     train(model, network_input, network_output)
 
 if __name__ == '__main__':

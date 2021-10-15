@@ -6,7 +6,7 @@ import glob
 from pylab import plot, show, figure, imshow
 import matplotlib.pyplot as plt
 
-in_dir = 'audiotest/'
+in_dir = 'audiotest/' + "*.wav"
 out_dir = 'segments_audiotest/'
 if not os.path.exists(out_dir):
     os.makedirs(out_dir)
@@ -26,7 +26,7 @@ def segments_gen(fileName):
 
     logNorm = UnaryOperator(type='log')
     pool = essentia.Pool()
-    for frame in FrameGenerator(audio, frameSize = 8192,  hopSize = 512, startFromZero=True): #2048, 512
+    for frame in FrameGenerator(audio, frameSize = 8192,  hopSize = 256, startFromZero=True): #2048, 512 # 8192, 512
         mfcc_bands, mfcc_coeffs = mfcc(spectrum(w(frame)))
         pool.add('lowlevel.mfcc', mfcc_coeffs)
 
@@ -46,8 +46,8 @@ def segments_gen(fileName):
 def record_segments(audio, segments):
     for segment_index in range(len(segments) - 1):
         global counter
-        start_position = int(segments[segment_index] * 512)
-        end_position = int(segments[segment_index + 1] * 512)
+        start_position = int(segments[segment_index] * 256)
+        end_position = int(segments[segment_index + 1] * 256)
         writer = essentia.standard.MonoWriter(filename=out_dir + "{:06d}".format(counter) + ".wav", format="wav")(audio[start_position:end_position])
         counter = counter + 1
     print('Num of Segments: ' + str(len(segments)))
@@ -55,6 +55,6 @@ def record_segments(audio, segments):
 def gen_all_segments(audio_files):
 	return list(map(segments_gen, audio_files))
 
-input_data = gen_all_segments(sorted(glob.glob(in_dir + "*.wav"))) #can be .mp3
+input_data = gen_all_segments(sorted(glob.glob(in_dir))) #can be .mp3
 
 print("Done cutting segments")

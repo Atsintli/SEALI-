@@ -22,7 +22,7 @@ def convert_write_json(data, json_file):
 #%%
 def roundFeatures(features):
     myarr=[]
-    roundNum = 1
+    roundNum = 2
     features_round = np.round(features, roundNum)
     features_unique = np.unique(features_round)
     note_to_int = dict((note, number) for number, note in enumerate(features_unique))
