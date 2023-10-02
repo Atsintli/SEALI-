@@ -14,7 +14,7 @@ Nota: Esta guia ha sido realizada para sistemas operativos GNU/LINUX. Hasta el m
 
     • Pip3: PythonOSC, JSON, Essentia, SoundCard_
 
-      pip3 install essentia SoundCard jsonlib install python-osc
+      pip3 install essentia SoundCard jsonlib python-osc tensorflow pydub toolz
 
 ### 1. Clonar desde la terminal o descargar el repositorio:
 
